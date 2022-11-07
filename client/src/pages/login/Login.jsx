@@ -1,4 +1,5 @@
 import { useContext, useState } from "react";
+import { Link } from "react-router-dom";
 import { login } from "../../authContext/apiCalls";
 import { AuthContext } from "../../authContext/AuthContext";
 import "./login.scss";
@@ -13,7 +14,7 @@ export default function Login() {
     login({ email, password }, dispatch);
   };
   return (
-    <div className="login">
+    <div className="login" style={{backgroundImage:"../../assets/netflix-bg.png"}}>
       <div className="top">
         <div className="wrapper">
           <img
@@ -40,7 +41,7 @@ export default function Login() {
             Sign In
           </button>
           <span>
-            New to Netflix? <b>Sign up now.</b>
+            New to Netflix? <Link to="/register"><b>Sign up now.</b></Link>
           </span>
           <small>
             This page is protected by Google reCAPTCHA to ensure you're not a

@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useRef } from "react";
 import { useState } from "react";
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import "./register.scss";
 
 export default function Register() {
@@ -9,18 +9,11 @@ export default function Register() {
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
   const history = useHistory();
+  const [step,setStep]=useState(1);
 
-  const emailRef = useRef();
-  const passwordRef = useRef();
-  const usernameRef = useRef();
 
-  const handleStart = () => {
-    setEmail(emailRef.current.value);
-  };
   const handleFinish = async (e) => {
     e.preventDefault();
-    setPassword(passwordRef.current.value);
-    setUsername(usernameRef.current.value);
     try {
       await axios.post("auth/register", { email,username, password });
       history.push("/login");
@@ -35,7 +28,7 @@ export default function Register() {
             src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Netflix_2015_logo.svg/2560px-Netflix_2015_logo.svg.png"
             alt=""
           />
-          <button className="loginButton">Sign In</button>
+          <Link to="/login"><button className="loginButton"><span style={{color:'white'}}>Sign In</span></button></Link>
         </div>
       </div>
       <div className="container">
@@ -44,17 +37,17 @@ export default function Register() {
         <p>
           Ready to watch? Enter your email to create or restart your membership.
         </p>
-        {!email ? (
+        {step==1 ? (
           <div className="input">
-            <input type="email" placeholder="email address" ref={emailRef} />
-            <button className="registerButton" onClick={handleStart}>
+            <input type="email" placeholder="email address" onChange={(e)=>setEmail(e.target.value)} />
+            <button className="registerButton" onClick={()=>email?setStep(2):""}>
               Get Started
             </button>
           </div>
         ) : (
           <form className="input">
-            <input type="username" placeholder="username" ref={usernameRef} />
-            <input type="password" placeholder="password" ref={passwordRef} />
+            <input type="username" placeholder="username" onChange={(e)=>setUsername(e.target.value)} />
+            <input type="password" placeholder="password" onChange={(e)=>setPassword(e.target.value)}  />
             <button className="registerButton" onClick={handleFinish}>
               Start
             </button>

@@ -4,40 +4,63 @@ import { DeleteOutline } from "@material-ui/icons";
 import { userRows } from "../../dummyData";
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import { useEffect } from "react";
+import axios from "axios";
 
 export default function UserList() {
   const [data, setData] = useState(userRows);
 
+  useEffect(()=>{
+    const getUsers=async ()=>{
+      try{
+        const res=await axios.get("/users",{
+          headers: {
+            token:
+              "Bearer "+JSON.parse(localStorage.getItem("user")).accessToken,
+          },
+        });
+        
+        setData(res.data.map(d=>{
+          const [id,email,username]=[d._id,d.email,d.username];
+          return {id,username,email};
+        }));
+      }catch(err){
+        console.log(err);
+      }
+    };
+    getUsers();
+  },[]);
   const handleDelete = (id) => {
-    setData(data.filter((item) => item.id !== id));
+    const deleteUser=async ()=>{
+      try{
+        const res=await axios.delete('/users/'+id,{
+          headers: {
+            token: "Bearer " + JSON.parse(localStorage.getItem("user")).accessToken,
+          },
+        });
+        setData(data.filter((item) => item.id !== id));
+      }catch(err){
+        console.log(err);
+      }
+    };
+    deleteUser();
   };
   
   const columns = [
-    { field: "id", headerName: "ID", width: 90 },
+    { field: "id", headerName: "ID", width: 300 },
     {
-      field: "user",
-      headerName: "User",
-      width: 200,
+      field: "username",
+      headerName: "Username",
+      width: 300,
       renderCell: (params) => {
         return (
           <div className="userListUser">
-            <img className="userListImg" src={params.row.avatar} alt="" />
             {params.row.username}
           </div>
         );
       },
     },
-    { field: "email", headerName: "Email", width: 200 },
-    {
-      field: "status",
-      headerName: "Status",
-      width: 120,
-    },
-    {
-      field: "transaction",
-      headerName: "Transaction Volume",
-      width: 160,
-    },
+    { field: "email", headerName: "Email", width: 300 },
     {
       field: "action",
       headerName: "Action",
@@ -45,11 +68,13 @@ export default function UserList() {
       renderCell: (params) => {
         return (
           <>
-            <Link to={"/user/" + params.row.id}>
-              <button className="userListEdit">Edit</button>
+            <Link
+              to={{ pathname: "/user/" + params.row.id, user: params.row }}
+            >
+              <button className="productListEdit">Edit</button>
             </Link>
             <DeleteOutline
-              className="userListDelete"
+              className="productListDelete"
               onClick={() => handleDelete(params.row.id)}
             />
           </>
