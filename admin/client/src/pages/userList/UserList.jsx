@@ -13,7 +13,7 @@ export default function UserList() {
   useEffect(()=>{
     const getUsers=async ()=>{
       try{
-        const res=await axios.get("http://netflix-clone-mern-client.herokuapp.com/api/users",{
+        const res=await axios.get("/api/users",{
           headers: {
             token:
               "Bearer "+JSON.parse(localStorage.getItem("user")).accessToken,
@@ -33,7 +33,7 @@ export default function UserList() {
   const handleDelete = (id) => {
     const deleteUser=async ()=>{
       try{
-        const res=await axios.delete('http://netflix-clone-mern-client.herokuapp.com/api/users/'+id,{
+        const res=await axios.delete('/api/users/'+id,{
           headers: {
             token: "Bearer " + JSON.parse(localStorage.getItem("user")).accessToken,
           },

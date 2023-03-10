@@ -30,7 +30,7 @@ export default function Home() {
   useEffect(() => {
     const getStats = async () => {
       try {
-        const res = await axios.get("http://netflix-clone-mern-client.herokuapp.com/api/users/stats", {
+        const res = await axios.get("/api/users/stats", {
           headers: {
             token:
               "Bearer "+JSON.parse(localStorage.getItem("user")).accessToken,
