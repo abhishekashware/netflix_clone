@@ -15,7 +15,7 @@ export default function Register() {
   const handleFinish = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("api/auth/register", { email,username, password });
+      await axios.post("/api/auth/register", { email,username, password });
       history.push("/login");
     } catch (err) {}
   };
