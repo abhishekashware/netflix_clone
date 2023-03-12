@@ -26,15 +26,15 @@ function App() {
   return (
     <Router>
       <Switch>
+        {user?<Topbar />:''}
         <Route path="/login">{user ? <Redirect to="/" /> : <Login />}</Route>
+        <Route exact path="/">
+                {user?<Home />:<Redirect to="/login" />}
+        </Route>
         {user && (
           <>
-            <Topbar />
             <div className="container">
               <Sidebar />
-              <Route exact path="/">
-                <Home />
-              </Route>
               <Route path="/users">
                 <UserList />
               </Route>
